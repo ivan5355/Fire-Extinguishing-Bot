@@ -3,13 +3,18 @@ public class Cell {
     private boolean isOpen;
     private boolean hasFire;
     private boolean hasBot;
+    private int row;
+    private int col;
 
-    public Cell() {
+    public Cell(int r, int c) {
+        this.row = r;
+        this.col = c;
         hasButton = false;
         isOpen = false;
         hasFire = false;
         hasBot = false;
     }
+
 
     public boolean hasButton() {
         return hasButton;
@@ -42,6 +47,15 @@ public class Cell {
     public void setBot(boolean hasBot) {
         this.hasBot = hasBot;
     }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
 
     
 }
