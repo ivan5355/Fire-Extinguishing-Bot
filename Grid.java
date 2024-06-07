@@ -1,5 +1,8 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class Grid {
     private Cell[][] grid;
@@ -200,5 +203,82 @@ public class Grid {
  
         grid.printGrid();
     }
+
+    //im using bfs for bot 1 (i think i could also use djikstra alg tho)
+    public List<Cell> finding_path_for_bot_one(Cell beginning, Cell ending, Cell fire)
+    {
+        // HashMap<Cell, Cell> remaking_the_path_for_the_cells = new HashMap<>();
+        boolean[][] seen_these_cells = new boolean[rows][cols];
+        Queue<Cell> lineup_of_the_cells = new LinkedList<>();
+
+
+        seen_these_cells[beginning.getRow()][ending.getCol()] = true;
+        beginning.setParent_of_the_cell(null);
+        lineup_of_the_cells.add(beginning);
+        // remaking_the_path_for_the_cells.put(beginning, null);
+
+        while(!lineup_of_the_cells.isEmpty())
+        {
+            Cell the_present_cell = lineup_of_the_cells.remove();
+
+            if(the_present_cell.equals(ending))
+            {
+                 return remaking_the_path_for_the_cells(ending);
+            }
+            
+            //im trying to look thru the adjacent cells in the grid
+            int[] indices_for_the_colum = {0, 0, -1, 1};
+            int[] indices_for_the_row = {-1,-1,0,0};
+           
+            for(int i = 0 ; i < 4; i++)
+            {
+                int r = the_present_cell.getRow() + indices_for_the_row[i];
+                int c = the_present_cell.getCol() + indices_for_the_colum[i];
+                if(is_it_safe_to_visit_the_cel(r,c,seen_these_cells))
+                {
+                    seen_these_cells[r][c] = true;
+                    
+                    Cell look_at_upcoming_cell = grid[r][c];  
+                   
+                    look_at_upcoming_cell.setParent_of_the_cell(the_present_cell);     
+                   
+                    lineup_of_the_cells.add(look_at_upcoming_cell);         
+
+                
+                }
+            }
+
+
+        }
+
+        return new LinkedList<>();
+
+        
+    }
+
+    private List<Cell> remaking_the_path_for_the_cells(Cell ending)
+    {
+        //add implementation
+        return blockedCells_with_one_open_neighbour;
+        
+    }
+
+
+    private boolean is_it_safe_to_visit_the_cel(int r, int c, boolean[][]seen_these_cells)
+    {
+        //add implementation
+        return false;
+        
+    }
+
+
+
+
+
+
+
+
+
+
 
 }

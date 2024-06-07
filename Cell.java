@@ -5,6 +5,7 @@ public class Cell {
     private boolean hasBot;
     private int row;
     private int col;
+    private Cell parent_of_the_Cell;
 
     public Cell(int r, int c) {
         this.row = r;
@@ -54,6 +55,14 @@ public class Cell {
 
     public int getCol() {
         return col;
+    }
+
+    public Cell getParent_of_the_Cell() {
+        return parent_of_the_Cell;
+    }
+    
+    public void setParent_of_the_cell(Cell parent_of_the_Cell) {
+        this.parent_of_the_Cell = parent_of_the_Cell;
     }
 
 
