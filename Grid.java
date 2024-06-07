@@ -128,27 +128,32 @@ public class Grid {
     }
 
     public void randomly_select_half_open_cells_with_one_open_neighbour_and_open_blocked_neigbor(List<Cell> cells) {
-        for(int i = 0; i < cells.size()/2; i++){
+        List<Cell> half_of_open_cells_with_open_neigCells = new ArrayList<Cell>();
+
+        int half = cells.size()/2;
+
+        System.out.println("Half of open cells with open neigbors");
+        for(int i = 0; i < half; i++){
              int index = (int) (Math.random() * cells.size());
              System.out.println(cells.get(index).getRow() + " " + cells.get(index).getCol());
-             cells.add(openCells_with_one_open_neighbour.get(index));
+             half_of_open_cells_with_open_neigCells.add(cells.get(index));
+             cells.remove(index);
         }
         
         System.out.println(cells.size());
         System.out.println("**********");
 
-        for(Cell cell: cells){
+        System.out.println("Blocked neigbors opened of half of open cells with open neigbors");
+        for(Cell cell: half_of_open_cells_with_open_neigCells){
             List<Cell> blocked_neigbors = get_all_blocked_neigbors_of_a_cell(cell);
             if(blocked_neigbors.size() > 0){
                 int index = (int) (Math.random() * blocked_neigbors.size());
+                System.out.println(blocked_neigbors.get(index).getRow() + " " + blocked_neigbors.get(index).getCol());
                 blocked_neigbors.get(index).setOpen(true);
-    
             }
         }
-        
      }
 
-    
    public void printGrid() {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
@@ -180,14 +185,19 @@ public class Grid {
 
         grid.get_opencells_with_one_open_neighbour();
 
+       System.out.println("Open cells with one open neighbour");
        for(Cell cell: grid.openCells_with_one_open_neighbour){
             System.out.println(cell.getRow() + " " + cell.getCol());
          }
 
-        //unable to test it
-       // grid.randomly_select_half_open_cells_with_one_open_neighbour_and_open_blocked_neigbor(grid.openCells_with_one_open_neighbour);
+         System.out.println(grid.openCells_with_one_open_neighbour.size());
+
+         System.out.println("**********");
+
+        
+        grid.randomly_select_half_open_cells_with_one_open_neighbour_and_open_blocked_neigbor(grid.openCells_with_one_open_neighbour);
  
-        // grid.printGrid();
+        grid.printGrid();
     }
 
 }
