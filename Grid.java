@@ -6,13 +6,12 @@ public class Grid {
     private int rows;
     private int cols;
     private List<Cell> blockedCells_with_one_open_neighbour = new ArrayList<Cell>();
-    private List<Cell> openCells_with_one_open_neighbour = new ArrayList<Cell>();
 
     public Grid(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
         this.blockedCells_with_one_open_neighbour = new ArrayList<Cell>();
-        this.openCells_with_one_open_neighbour = new ArrayList<Cell>();
+       
         grid = new Cell[rows][cols];
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
@@ -80,7 +79,8 @@ public class Grid {
 
 
 
-    public void get_opencells_with_one_open_neighbour() {
+    public List<Cell> get_open_cells_with_one_open_neighbour() {
+        List<Cell> openCells_with_one_open_neighbour = new ArrayList<Cell>();
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c< cols; c++) {
                if(grid[r][c].isOpen() == true){
@@ -103,6 +103,7 @@ public class Grid {
                 }
             }
         }
+        return openCells_with_one_open_neighbour;
     }
    
 
@@ -183,19 +184,19 @@ public class Grid {
         
         grid.printGrid();
 
-        grid.get_opencells_with_one_open_neighbour();
+       List<Cell> openCells_with_one_open_neighbour = grid.get_open_cells_with_one_open_neighbour();
 
        System.out.println("Open cells with one open neighbour");
-       for(Cell cell: grid.openCells_with_one_open_neighbour){
+       for(Cell cell: openCells_with_one_open_neighbour){
             System.out.println(cell.getRow() + " " + cell.getCol());
          }
 
-         System.out.println(grid.openCells_with_one_open_neighbour.size());
+         System.out.println(openCells_with_one_open_neighbour.size());
 
          System.out.println("**********");
 
         
-        grid.randomly_select_half_open_cells_with_one_open_neighbour_and_open_blocked_neigbor(grid.openCells_with_one_open_neighbour);
+        grid.randomly_select_half_open_cells_with_one_open_neighbour_and_open_blocked_neigbor(openCells_with_one_open_neighbour);
  
         grid.printGrid();
     }
