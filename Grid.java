@@ -204,6 +204,11 @@ public class Grid {
         grid.printGrid();
     }
 
+
+// • Bot 1 - This bot plans the shortest path to the button, avoiding the initial fire cell,
+// and then executes that
+// plan. The spread of the fire is ignored by the bot
+
     //im using bfs for bot 1 (i think i could also use djikstra alg tho)
     public List<Cell> finding_path_for_bot_one(Cell beginning, Cell ending, Cell fire)
     {
@@ -226,7 +231,7 @@ public class Grid {
                  return remaking_the_path_for_the_cells(ending);
             }
             
-            //im trying to look thru the adjacent cells in the grid
+            //look thru the adjacent cells in the grid
             int[] indices_for_the_colum = {0, 0, -1, 1};
             int[] indices_for_the_row = {-1,-1,0,0};
            
@@ -258,16 +263,25 @@ public class Grid {
 
     private List<Cell> remaking_the_path_for_the_cells(Cell ending)
     {
-        //add implementation
-        return blockedCells_with_one_open_neighbour;
+        LinkedList<Cell> new_cell_path = new LinkedList<>();
+        for (Cell i = ending; i != null; i = i.getParent_of_the_Cell()) 
+        {
+            new_cell_path.addFirst(i);
+        }
+        return new_cell_path;
         
     }
 
 
     private boolean is_it_safe_to_visit_the_cel(int r, int c, boolean[][]seen_these_cells)
     {
-        //add implementation
-        return false;
+        return r >= 0 &&
+               r < rows && 
+               c >= 0 && 
+               c < cols && 
+               !seen_these_cells[r][c] && 
+               grid[r][c].isOpen();
+
         
     }
 
