@@ -8,7 +8,12 @@ public class Grid {
     private Cell[][] grid;
     private int rows;
     private int cols;
+    private Cell initial_fire_cell;
+    private Cell button_Cell;
+    private Cell bot_Cell;
     private List<Cell> blockedCells_with_one_open_neighbour = new ArrayList<Cell>();
+
+    
 
     public Grid(int rows, int cols) {
         this.rows = rows;
@@ -131,6 +136,7 @@ public class Grid {
         return blocked_neigbors;
     }
 
+
     public void randomly_select_half_open_cells_with_one_open_neighbour_and_open_blocked_neigbor(List<Cell> cells) {
         List<Cell> half_of_open_cells_with_open_neigCells = new ArrayList<Cell>();
 
@@ -156,19 +162,73 @@ public class Grid {
                 blocked_neigbors.get(index).setOpen(true);
             }
         }
-     }
+    }
+
+    public List<Cell> get_all_open_cells() {
+        List<Cell> openCells = new ArrayList<Cell>();
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c< cols; c++) {
+               if(grid[r][c].isOpen() == true){
+                    openCells.add(grid[r][c]);
+                }
+            }
+        }
+        return openCells;
+    }
+
 
    public void printGrid() {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
-                if (grid[r][c].isOpen()) {
+                if(grid[r][c].hasButton()){
+                    System.out.print("B");
+                } else if(grid[r][c].hasFire()){
+                    System.out.print("F");
+                } else if(grid[r][c].hasBot()){
+                    System.out.print("T");
+                }
+                else if (grid[r][c].isOpen()) {
                     System.out.print("O");
-                } else {
+                }
+                else{
                     System.out.print("X");
                 }
             }
             System.out.println();
         }
+    }
+
+    public Cell getInitialFireCell() {
+        return initial_fire_cell;
+    }
+
+    public Cell getButtonCell() {
+        return button_Cell;
+    }
+
+    public Cell getBotCell() {
+        return bot_Cell;
+    }
+
+
+    public void generate_unique_random_fire_button_and_bot_cells(List<Cell> openCells) {
+
+        int index = (int) (Math.random() * openCells.size());
+        openCells.get(index).setButton(true);
+        button_Cell = openCells.get(index);
+        openCells.remove(index);
+
+        int index2 = (int) (Math.random() * openCells.size());
+        openCells.get(index2).setFire(true);
+        openCells.get(index2).setInitialFire(true);
+        initial_fire_cell = openCells.get(index2);
+        openCells.remove(index2);
+
+        int index3 = (int) (Math.random() * openCells.size());
+        openCells.get(index3).setBot(true);
+        bot_Cell = openCells.get(index3);
+        openCells.remove(index3);
+
     }
 
     public static void main(String[] args) {
@@ -201,21 +261,34 @@ public class Grid {
         
         grid.randomly_select_half_open_cells_with_one_open_neighbour_and_open_blocked_neigbor(openCells_with_one_open_neighbour);
  
-        grid.printGrid();
-    }
+        List<Cell> openCells = grid.get_all_open_cells();
+        grid.generate_unique_random_fire_button_and_bot_cells(openCells); 
 
+    
+
+        grid.printGrid();
+        System.out.println("Fire Cell: "+grid.getInitialFireCell().getRow() + " " + grid.getInitialFireCell().getCol());  
+        System.out.println("Buttton Cell: "+grid.getButtonCell().getRow() + " " + grid.getButtonCell().getCol());
+        System.out.println("Bot Cell: "+grid.getBotCell().getRow() + " " + grid.getBotCell().getCol());
+        
+        System.out.println("Bot1 path");
+        List<Cell> path = grid.finding_path_for_bot_one(grid.getBotCell(), grid.getButtonCell());
+        for(Cell cell: path){
+            System.out.println(cell.getRow() + " " + cell.getCol());
+        }
+    
+    }
 
 // • Bot 1 - This bot plans the shortest path to the button, avoiding the initial fire cell,
 // and then executes that
 // plan. The spread of the fire is ignored by the bot
 
     //im using bfs for bot 1 (i think i could also use djikstra alg tho)
-    public List<Cell> finding_path_for_bot_one(Cell beginning, Cell ending, Cell fire)
+    public List<Cell> finding_path_for_bot_one(Cell beginning, Cell ending)
     {
         // HashMap<Cell, Cell> remaking_the_path_for_the_cells = new HashMap<>();
         boolean[][] seen_these_cells = new boolean[rows][cols];
         Queue<Cell> lineup_of_the_cells = new LinkedList<>();
-
 
         seen_these_cells[beginning.getRow()][ending.getCol()] = true;
         beginning.setParent_of_the_cell(null);
@@ -249,16 +322,10 @@ public class Grid {
                    
                     lineup_of_the_cells.add(look_at_upcoming_cell);         
 
-                
                 }
             }
-
-
         }
-
-        return new LinkedList<>();
-
-        
+        return new LinkedList<>();  
     }
 
     private List<Cell> remaking_the_path_for_the_cells(Cell ending)
@@ -272,7 +339,6 @@ public class Grid {
         
     }
 
-
     private boolean is_it_safe_to_visit_the_cel(int r, int c, boolean[][]seen_these_cells)
     {
         return r >= 0 &&
@@ -280,19 +346,8 @@ public class Grid {
                c >= 0 && 
                c < cols && 
                !seen_these_cells[r][c] && 
+               !grid[r][c].hasInitialFire() &&
                grid[r][c].isOpen();
-
-        
     }
-
-
-
-
-
-
-
-
-
-
 
 }

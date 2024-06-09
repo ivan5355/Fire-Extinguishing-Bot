@@ -3,6 +3,7 @@ public class Cell {
     private boolean isOpen;
     private boolean hasFire;
     private boolean hasBot;
+    private boolean has_initial_fire;
     private int row;
     private int col;
     private Cell parent_of_the_Cell;
@@ -14,8 +15,16 @@ public class Cell {
         isOpen = false;
         hasFire = false;
         hasBot = false;
+        has_initial_fire = false;
     }
 
+    public boolean hasInitialFire() {
+        return has_initial_fire;
+    }
+
+    public void setInitialFire(boolean has_initial_fire) {
+        this.has_initial_fire = has_initial_fire;
+    }
 
     public boolean hasButton() {
         return hasButton;
@@ -48,6 +57,8 @@ public class Cell {
     public void setBot(boolean hasBot) {
         this.hasBot = hasBot;
     }
+
+
 
     public int getRow() {
         return row;
