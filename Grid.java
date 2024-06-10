@@ -290,7 +290,7 @@ public class Grid {
         boolean[][] seen_these_cells = new boolean[rows][cols];
         Queue<Cell> lineup_of_the_cells = new LinkedList<>();
 
-        seen_these_cells[beginning.getRow()][ending.getCol()] = true;
+        seen_these_cells[beginning.getRow()][beginning.getCol()] = true; //changed
         beginning.setParent_of_the_cell(null);
         lineup_of_the_cells.add(beginning);
         // remaking_the_path_for_the_cells.put(beginning, null);
@@ -305,8 +305,9 @@ public class Grid {
             }
             
             //look thru the adjacent cells in the grid
-            int[] indices_for_the_colum = {0, 0, -1, 1};
-            int[] indices_for_the_row = {-1,-1,0,0};
+            int[] indices_for_the_row = {-1, 1, 0, 0}; // changed
+            int[] indices_for_the_colum = {0, 0, -1, 1}; // changed
+            
            
             for(int i = 0 ; i < 4; i++)
             {
