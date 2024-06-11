@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -11,9 +12,7 @@ public class Grid {
     private Cell initial_fire_cell;
     private Cell button_Cell;
     private Cell bot_Cell;
-    private List<Cell> blockedCells_with_one_open_neighbour = new ArrayList<Cell>();
-
-    
+    private List<Cell> blockedCells_with_one_open_neighbour;
 
     public Grid(int rows, int cols) {
         this.rows = rows;
@@ -57,7 +56,6 @@ public class Grid {
                      }
                 }
             }
-
         }
     }
 
@@ -70,9 +68,7 @@ public class Grid {
         blockedCells_with_one_open_neighbour.get(index).setOpen(true);
     }
 
-    public Cell getCell(int row, int col) {
-        return grid[row][col];
-    }
+   
 
     public void setCell(int row, int col, Cell cell) {
         grid[row][col] = cell;
@@ -114,6 +110,9 @@ public class Grid {
         return openCells_with_one_open_neighbour;
     }
    
+    public Cell getCell(int row, int col) {
+        return grid[row][col];
+    }
 
     public List<Cell> get_all_blocked_neigbors_of_a_cell(Cell cell) {
         List<Cell> blocked_neigbors = new ArrayList<Cell>();
@@ -210,9 +209,18 @@ public class Grid {
         return bot_Cell;
     }
 
+    public int getRows()
+    {
+        return rows;
+    }
+
+    public int getCols()
+    {
+        return cols;
+    }
+
 
     public void generate_unique_random_fire_button_and_bot_cells(List<Cell> openCells) {
-
         int index = (int) (Math.random() * openCells.size());
         openCells.get(index).setButton(true);
         button_Cell = openCells.get(index);
@@ -228,7 +236,35 @@ public class Grid {
         openCells.get(index3).setBot(true);
         bot_Cell = openCells.get(index3);
         openCells.remove(index3);
+    }
 
+    public List<Cell> get_all_adj_open_neigbors_of_bot_cells(Cell cell) {
+        List<Cell> open_neigbors = new ArrayList<Cell>();
+        int r = cell.getRow();
+        int c = cell.getCol();
+
+        if(r-1 >= 0 && grid[r-1][c].isOpen() == true){
+            open_neigbors.add(grid[r-1][c]);
+        }
+        if(r+1 < rows && grid[r+1][c].isOpen() == true){
+            open_neigbors.add(grid[r+1][c]);
+        }
+        if(c-1 >= 0 && grid[r][c-1].isOpen() == true){
+            open_neigbors.add(grid[r][c-1]);
+        }
+        if(c+1 < cols && grid[r][c+1].isOpen() == true){
+            open_neigbors.add(grid[r][c+1]);
+        }
+
+        return open_neigbors;
+        
+    }
+   
+    
+
+
+    public Cell[][] getGrid() {
+        return grid;
     }
 
     public static void main(String[] args) {
@@ -270,85 +306,28 @@ public class Grid {
         System.out.println("Fire Cell: "+grid.getInitialFireCell().getRow() + " " + grid.getInitialFireCell().getCol());  
         System.out.println("Buttton Cell: "+grid.getButtonCell().getRow() + " " + grid.getButtonCell().getCol());
         System.out.println("Bot Cell: "+grid.getBotCell().getRow() + " " + grid.getBotCell().getCol());
-        
+    
         System.out.println("Bot1 path");
-        List<Cell> path = grid.finding_path_for_bot_one(grid.getBotCell(), grid.getButtonCell());
+        Fire fire = new Fire(grid);
+        Bot1 bot1 = new Bot1(grid, fire);
+
+        List<Cell> path = bot1.finding_path_for_bot_one(grid.getBotCell(), grid.getButtonCell());
         for(Cell cell: path){
             System.out.println(cell.getRow() + " " + cell.getCol());
         }
     
+        bot1.move_bot(path, grid.getBotCell(), grid.getButtonCell(), 0.2); 
+      
     }
 
-// • Bot 1 - This bot plans the shortest path to the button, avoiding the initial fire cell,
-// and then executes that
-// plan. The spread of the fire is ignored by the bot
+  
+    
 
-    //im using bfs for bot 1 (i think i could also use djikstra alg tho)
-    public List<Cell> finding_path_for_bot_one(Cell beginning, Cell ending)
-    {
-        // HashMap<Cell, Cell> remaking_the_path_for_the_cells = new HashMap<>();
-        boolean[][] seen_these_cells = new boolean[rows][cols];
-        Queue<Cell> lineup_of_the_cells = new LinkedList<>();
+    
 
-        seen_these_cells[beginning.getRow()][beginning.getCol()] = true; //changed
-        beginning.setParent_of_the_cell(null);
-        lineup_of_the_cells.add(beginning);
-        // remaking_the_path_for_the_cells.put(beginning, null);
+     
+    
 
-        while(!lineup_of_the_cells.isEmpty())
-        {
-            Cell the_present_cell = lineup_of_the_cells.remove();
-
-            if(the_present_cell.equals(ending))
-            {
-                 return remaking_the_path_for_the_cells(ending);
-            }
-            
-            //look thru the adjacent cells in the grid
-            int[] indices_for_the_row = {-1, 1, 0, 0}; // changed
-            int[] indices_for_the_colum = {0, 0, -1, 1}; // changed
-            
-           
-            for(int i = 0 ; i < 4; i++)
-            {
-                int r = the_present_cell.getRow() + indices_for_the_row[i];
-                int c = the_present_cell.getCol() + indices_for_the_colum[i];
-                if(is_it_safe_to_visit_the_cel(r,c,seen_these_cells))
-                {
-                    seen_these_cells[r][c] = true;
-                    
-                    Cell look_at_upcoming_cell = grid[r][c];  
-                   
-                    look_at_upcoming_cell.setParent_of_the_cell(the_present_cell);     
-                   
-                    lineup_of_the_cells.add(look_at_upcoming_cell);         
-
-                }
-            }
-        }
-        return new LinkedList<>();  
-    }
-
-    private List<Cell> remaking_the_path_for_the_cells(Cell ending)
-    {
-        LinkedList<Cell> new_cell_path = new LinkedList<>();
-        for (Cell i = ending; i != null; i = i.getParent_of_the_Cell()) 
-        {
-            new_cell_path.addFirst(i);
-        }
-        return new_cell_path;
-        
-    }
-
-    private boolean is_it_safe_to_visit_the_cel(int r, int c, boolean[][]seen_these_cells)
-    {
-        return r >= 0 &&
-               r < rows && 
-               c >= 0 && 
-               c < cols && 
-               !seen_these_cells[r][c] && 
-               !grid[r][c].hasInitialFire() &&
-               grid[r][c].isOpen();
-    }
+    
 
 }

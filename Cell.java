@@ -1,6 +1,6 @@
 public class Cell {
     private boolean hasButton;
-    private boolean isOpen;
+    private  boolean isOpen;
     private boolean hasFire;
     private boolean hasBot;
     private boolean has_initial_fire;
@@ -57,8 +57,6 @@ public class Cell {
     public void setBot(boolean hasBot) {
         this.hasBot = hasBot;
     }
-
-
 
     public int getRow() {
         return row;
