@@ -81,17 +81,7 @@ public class Bot1 {
                !grid.getCell(r,c).hasInitialFire() &&
                 grid.getCell(r,c).isOpen();
     }
-
-
-    public void extinguish_fire() {
-        List<Cell> fire_cells = fire.getFireCells();
-        for (Cell cell : fire_cells) {
-            int r = cell.getRow();
-            int c = cell.getCol();
-            grid.getCell(r, c).setFire(false);
-        }
-    }
-
+  
     public void move_bot(List<Cell> path, Cell bot_cell, Cell button_cell, double ship_flambility) {
         for (int i = 0; i < path.size(); i++) {
             List<Cell> adj_open_cells = fire.get_all_adj_open_neigbors_of_fire_cells();
@@ -101,12 +91,17 @@ public class Bot1 {
             next_cell.setBot(true);
             bot_cell = next_cell;
             grid.printGrid();
+            if(bot_cell.hasFire()){
+                System.out.println("Task failed");
+                break;
+            }
             System.out.println("**********");
             if (bot_cell.equals(button_cell)) {
+                System.out.println("Task completed");
+                fire.extinguish_fire();
                 break;
             }
         }
-        extinguish_fire();
         grid.printGrid();
      }
 

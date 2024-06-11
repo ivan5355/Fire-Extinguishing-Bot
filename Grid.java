@@ -68,8 +68,6 @@ public class Grid {
         blockedCells_with_one_open_neighbour.get(index).setOpen(true);
     }
 
-   
-
     public void setCell(int row, int col, Cell cell) {
         grid[row][col] = cell;
     }
@@ -80,8 +78,6 @@ public class Grid {
         }
         return blockedCells_with_one_open_neighbour;
     }
-
-
 
     public List<Cell> get_open_cells_with_one_open_neighbour() {
         List<Cell> openCells_with_one_open_neighbour = new ArrayList<Cell>();
@@ -219,7 +215,6 @@ public class Grid {
         return cols;
     }
 
-
     public void generate_unique_random_fire_button_and_bot_cells(List<Cell> openCells) {
         int index = (int) (Math.random() * openCells.size());
         openCells.get(index).setButton(true);
@@ -260,9 +255,6 @@ public class Grid {
         
     }
    
-    
-
-
     public Cell[][] getGrid() {
         return grid;
     }
@@ -299,35 +291,57 @@ public class Grid {
  
         List<Cell> openCells = grid.get_all_open_cells();
         grid.generate_unique_random_fire_button_and_bot_cells(openCells); 
-
-    
-
+        Cell[][] grid_copy =  grid.copyGridState();
+       
         grid.printGrid();
         System.out.println("Fire Cell: "+grid.getInitialFireCell().getRow() + " " + grid.getInitialFireCell().getCol());  
         System.out.println("Buttton Cell: "+grid.getButtonCell().getRow() + " " + grid.getButtonCell().getCol());
         System.out.println("Bot Cell: "+grid.getBotCell().getRow() + " " + grid.getBotCell().getCol());
     
-        System.out.println("Bot1 path");
-        Fire fire = new Fire(grid);
-        Bot1 bot1 = new Bot1(grid, fire);
+           //Bot #1 works
+        // System.out.println("Bot1 path");
+        // Fire fire = new Fire(grid);
+        // Bot1 bot1 = new Bot1(grid, fire);
 
-        List<Cell> path = bot1.finding_path_for_bot_one(grid.getBotCell(), grid.getButtonCell());
-        for(Cell cell: path){
-            System.out.println(cell.getRow() + " " + cell.getCol());
-        }
-    
-        bot1.move_bot(path, grid.getBotCell(), grid.getButtonCell(), 0.2); 
-      
+        // List<Cell> path = bot1.finding_path_for_bot_one(grid.getBotCell(), grid.getButtonCell());
+        // for(Cell cell: path){
+        //     System.out.println(cell.getRow() + " " + cell.getCol());
+        // }
+        
+        // bot1.move_bot(path, grid.getBotCell(), grid.getButtonCell(), 0.7);  
+        
+
+          //Bot #2 test - still need to finish
+        //  System.out.println("Bot2 path");
+        //  Fire fire = new Fire(grid);
+        //  Bot2 bot2 = new Bot2(grid, fire);
+        //  bot2.moveBot(grid.getBotCell(), grid.getButtonCell(), 0.7);
     }
 
-  
-    
+    public Cell[][] copyGridState() {
+        Cell[][] copiedGrid = new Cell[rows][cols];
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                copiedGrid[r][c] = new Cell(r, c);
+                copiedGrid[r][c].setOpen(grid[r][c].isOpen());
+                copiedGrid[r][c].setFire(grid[r][c].hasFire());
+                copiedGrid[r][c].setButton(grid[r][c].hasButton());
+                copiedGrid[r][c].setBot(grid[r][c].hasBot());
+            }
+        }
+        return copiedGrid;
+    }
 
-    
+    public void loadGridState(Cell[][] savedGrid) {
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                grid[r][c].setOpen(savedGrid[r][c].isOpen());
+                grid[r][c].setFire(savedGrid[r][c].hasFire());
+                grid[r][c].setButton(savedGrid[r][c].hasButton());
+                grid[r][c].setBot(savedGrid[r][c].hasBot());
+            }
+        }
+    }
 
-     
-    
-
-    
 
 }

@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Fire {
     Grid grid;
@@ -77,5 +78,15 @@ public class Fire {
             }
         }
     }
+
+    public void extinguish_fire() {
+        List<Cell> fire_cells = getFireCells();
+        for (Cell cell : fire_cells) {
+            int r = cell.getRow();
+            int c = cell.getCol();
+            grid.getCell(r, c).setFire(false);
+        }
+    }
+
 
 }
