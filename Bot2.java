@@ -78,26 +78,45 @@ public class Bot2 {
                 grid.getCell(r,c).isOpen();
     }
 
-    public void moveBot(Cell beginning, Cell ending, double ship_flambility) {
-        List<Cell> path = finding_path_for_bot_two(beginning, ending);
+    public void moveBot(Cell bot, Cell button, double ship_flambility) {
+        List<Cell> path = finding_path_for_bot_two(bot, button);
         while(path.size() > 1) {
             Cell current = path.get(0);
             Cell next = path.get(1);
             current.setBot(false);
             next.setBot(true);
+            
             List<Cell> adjOpenCells = fire.get_all_adj_open_neigbors_of_fire_cells();
             fire.spread_fire(adjOpenCells, ship_flambility);
-            grid.printGrid();
-            System.out.println("Current path:");
-            for(Cell cell:path){
-                System.out.println(cell.getRow() + " " + cell.getCol());
+            
+            if(next.hasBot() && next.hasButton()) {
+                grid.printGrid();
+                System.out.println("Current path:");
+                for(Cell cell:path){
+                    System.out.println(cell.getRow() + " " + cell.getCol());
+                }
+                fire.extinguish_fire();
+                System.out.println("Fire has been extinguished. Task completed.");
+                break;
             }
-            path = finding_path_for_bot_two(grid.getBotCell(), ending);
-            path.remove(0);
+            if(!path.isEmpty()){
+                grid.printGrid();
+                System.out.println("Current path:");
+                for(Cell cell:path){
+                    System.out.println(cell.getRow() + " " + cell.getCol());
+                }
+                path = finding_path_for_bot_two(next, button);
+            }
+            if(path.isEmpty()) {
+                grid.printGrid();
+                System.out.println("Current path:");
+                for(Cell cell:path){
+                    System.out.println(cell.getRow() + " " + cell.getCol());
+                }
+                System.out.println("Task failed. No  path to button");
+            }
         }
+        
     }
-
-
-   
-
+    
 }

@@ -309,13 +309,12 @@ public class Grid {
         // }
         
         // bot1.move_bot(path, grid.getBotCell(), grid.getButtonCell(), 0.7);  
-        
 
-          //Bot #2 test - still need to finish
-        //  System.out.println("Bot2 path");
-        //  Fire fire = new Fire(grid);
-        //  Bot2 bot2 = new Bot2(grid, fire);
-        //  bot2.moveBot(grid.getBotCell(), grid.getButtonCell(), 0.7);
+         //Bot #2 test - still need to finish
+         System.out.println("Bot2 path");
+         Fire fire = new Fire(grid);
+         Bot2 bot2 = new Bot2(grid, fire);
+         bot2.moveBot(grid.getBotCell(), grid.getButtonCell(), 0.7);
     }
 
     public Cell[][] copyGridState() {
