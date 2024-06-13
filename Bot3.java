@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Bot3 
 {
-    private Grid grid;
+    private Grid  grid;
     private Fire fire;
 
     public Bot3(Grid grid, Fire fire) 
