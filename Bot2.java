@@ -80,6 +80,9 @@ public class Bot2 {
 
     public void moveBot(Cell bot, Cell button, double ship_flambility) {
         List<Cell> path = finding_path_for_bot_two(bot, button);
+        for(Cell cell:path){
+            System.out.println(cell.getRow() + " " + cell.getCol());
+        }
         while(path.size() > 1) {
             Cell current = path.get(0);
             Cell next = path.get(1);
@@ -92,6 +95,7 @@ public class Bot2 {
             if(next.hasBot() && next.hasButton()) {
                 grid.printGrid();
                 System.out.println("Current path:");
+                path = finding_path_for_bot_two(next, button);
                 for(Cell cell:path){
                     System.out.println(cell.getRow() + " " + cell.getCol());
                 }
@@ -101,11 +105,11 @@ public class Bot2 {
             }
             if(!path.isEmpty()){
                 grid.printGrid();
+                path = finding_path_for_bot_two(next, button);
                 System.out.println("Current path:");
                 for(Cell cell:path){
                     System.out.println(cell.getRow() + " " + cell.getCol());
                 }
-                path = finding_path_for_bot_two(next, button);
             }
             if(path.isEmpty()) {
                 grid.printGrid();
