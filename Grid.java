@@ -5,8 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import javax.swing.SwingUtilities;
+
 public class Grid {
     private Cell[][] grid;
+
     private int rows;
     private int cols;
     private Cell initial_fire_cell;
@@ -172,27 +175,35 @@ public class Grid {
     }
 
 
-   public void printGrid() {
+    public void printGrid() {
+       
+        System.out.print("  ");
+        for (int c = 0; c < cols; c++) {
+            System.out.print(c + " ");
+        }
+        System.out.println();
+    
         for (int r = 0; r < rows; r++) {
+
+            System.out.print(r + " ");
+    
             for (int c = 0; c < cols; c++) {
-                if(grid[r][c].hasButton()){
-                    System.out.print("B");
-                } else if(grid[r][c].hasFire()){
-                    System.out.print("F");
-                } else if(grid[r][c].hasBot()){
-                    System.out.print("T");
-                }
-                else if (grid[r][c].isOpen()) {
-                    System.out.print("O");
-                }
-                else{
-                    System.out.print("X");
+                if (grid[r][c].hasButton()) {
+                    System.out.print("B ");
+                } else if (grid[r][c].hasFire()) {
+                    System.out.print("* ");
+                } else if (grid[r][c].hasBot()) {
+                    System.out.print("T ");
+                } else if (grid[r][c].isOpen()) {
+                    System.out.print("O ");
+                } else {
+                    System.out.print("X ");
                 }
             }
             System.out.println();
         }
     }
-
+    
     public Cell getInitialFireCell() {
         return initial_fire_cell;
     }
@@ -258,16 +269,13 @@ public class Grid {
     public Cell[][] getGrid() {
         return grid;
     }
-
     public static void main(String[] args) {
        Grid grid = new Grid(10, 10);
-    
-       grid.get_all_cells_with_exactly_one_open_neighbour();
 
+       grid.get_all_cells_with_exactly_one_open_neighbour();
     //    for(Cell cell: grid.blockedCells_with_one_open_neighbour){
     //         System.out.println(cell.getRow() + " " + cell.getCol());
     //     }
-
         while(!grid.blockedCells_with_one_open_neighbour.isEmpty()){
             grid.get_all_cells_with_exactly_one_open_neighbour();
             grid.randomly_open_one_of_adjcells(grid.get_blockedCells_with_one_open_neighbour());
@@ -291,7 +299,9 @@ public class Grid {
  
         List<Cell> openCells = grid.get_all_open_cells();
         grid.generate_unique_random_fire_button_and_bot_cells(openCells); 
-        Cell[][] grid_copy =  grid.copyGridState();
+;
+
+       
        
         grid.printGrid();
         System.out.println("Fire Cell: "+grid.getInitialFireCell().getRow() + " " + grid.getInitialFireCell().getCol());  
@@ -311,9 +321,10 @@ public class Grid {
         // bot1.move_bot(path, grid.getBotCell(), grid.getButtonCell(), 0.7);  
 
          //Bot #2 test - still need to finish
-         System.out.println("Bot2 path");
+         
          Fire fire = new Fire(grid);
          Bot2 bot2 = new Bot2(grid, fire);
+         System.out.println("Bot2 path");
          bot2.moveBot(grid.getBotCell(), grid.getButtonCell(), 0.7);
     }
 
