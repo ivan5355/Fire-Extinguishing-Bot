@@ -84,9 +84,4 @@ public class Cell {
     public void setParent_of_the_cell(Cell parent_of_the_Cell) {
         this.parent_of_the_Cell = parent_of_the_Cell;
     }
-
-
-
-
-    
 }

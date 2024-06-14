@@ -134,9 +134,6 @@ public class Bot4 {
 
         System.out.println("Distacne to fire: " + path_to_fire_cell.size());
         System.out.println("Distacne to button: " + path_to_button.size());
-        for(Cell cell:path_to_button){
-            System.out.println(cell.getRow() + " " + cell.getCol());
-        }
         
         if (path_to_fire_cell.isEmpty()) {
             return Double.MAX_VALUE;
@@ -167,6 +164,42 @@ public class Bot4 {
     
 
     public List<Cell> get_path_for_bot_4(double ship_flambility) {
+        // Cell botCell = grid.getBotCell();
+        // List<Cell> path = new LinkedList<>();
+        // Fire fire = new Fire(grid); 
+    
+    //     while(!botCell.hasButton()) {
+    //         List<Cell> adjacent_open_cells = grid.get_all_adj_open_neigbors_of_bot_cells(botCell);
+    //         double min_cost = Double.MAX_VALUE;
+    //         Cell min_cost_cell = null;
+    //         for (Cell cell : adjacent_open_cells) {
+    //             System.out.println("Adjacent open cells:");
+    //             System.out.println(cell.getRow() + " " + cell.getCol());
+    //             System.out.println("Cost: " + get_cost(cell, grid.getButtonCell()));
+    //             double cost = get_cost(cell, grid.getButtonCell());
+    //             if (cost < min_cost) {
+    //                 min_cost = cost;
+    //                 min_cost_cell = cell;
+    //             }
+    //         }
+    //         if(min_cost_cell != null) {
+    //             path.add(min_cost_cell);
+    //             botCell.setBot(false);
+    //             min_cost_cell.setBot(true);
+    //             grid.printGrid(); 
+    //         }
+    //         else{
+    //              break;
+    //         }
+    //     }      
+    //  return path;
+    // }
+
+        // List<Cell> adjacent_open_cells = grid.get_all_adj_open_neigbors_of_bot_cells(botCell);
+        // double min_cost = Double.MAX_VALUE;
+        // Cell min_cost_cell = null;
+    
+       
         Cell botCell = grid.getBotCell();
         List<Cell> path = new LinkedList<>();
         Fire fire = new Fire(grid); // Assuming Fire is a class managing fire spread
@@ -196,7 +229,8 @@ public class Bot4 {
         
         
         return path;
-    }
+        }
+            
     
     
   

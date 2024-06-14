@@ -65,6 +65,7 @@ public class Bot1 {
         LinkedList<Cell> new_cell_path = new LinkedList<>();
         for (Cell i = ending; i != null; i = i.getParent_of_the_Cell()) 
         {
+           // i.setPath();
             new_cell_path.addFirst(i);
         }
         return new_cell_path;
