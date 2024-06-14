@@ -1,9 +1,11 @@
 public class Cell {
     private boolean hasButton;
-    private  boolean isOpen;
+    private boolean isOpen;
     private boolean hasFire;
     private boolean hasBot;
     private boolean has_initial_fire;
+    private boolean hasPath;
+
     private int row;
     private int col;
     private Cell parent_of_the_Cell;
@@ -16,6 +18,7 @@ public class Cell {
         hasFire = false;
         hasBot = false;
         has_initial_fire = false;
+        hasPath = false;
     }
 
     public boolean hasInitialFire() {
@@ -66,6 +69,14 @@ public class Cell {
         return col;
     }
 
+    public void setPath(boolean hasPath) {
+        this.hasPath = hasPath;
+    }
+
+    public boolean hasPath() {
+        return hasPath;
+    }
+
     public Cell getParent_of_the_Cell() {
         return parent_of_the_Cell;
     }
@@ -73,6 +84,8 @@ public class Cell {
     public void setParent_of_the_cell(Cell parent_of_the_Cell) {
         this.parent_of_the_Cell = parent_of_the_Cell;
     }
+
+
 
 
     

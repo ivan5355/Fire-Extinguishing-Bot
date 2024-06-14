@@ -5,8 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import javax.swing.SwingUtilities;
-
 public class Grid {
     private Cell[][] grid;
 
@@ -190,13 +188,16 @@ public class Grid {
             for (int c = 0; c < cols; c++) {
                 if (grid[r][c].hasButton()) {
                     System.out.print("B ");
+                // }else if(grid[r][c].hasPath()){
+                //     System.out.print("P ");
                 } else if (grid[r][c].hasFire()) {
                     System.out.print("* ");
                 } else if (grid[r][c].hasBot()) {
                     System.out.print("T ");
                 } else if (grid[r][c].isOpen()) {
                     System.out.print("O ");
-                } else {
+                }
+                else {
                     System.out.print("X ");
                 }
             }
@@ -211,6 +212,7 @@ public class Grid {
     public Cell getButtonCell() {
         return button_Cell;
     }
+
 
     public Cell getBotCell() {
         return bot_Cell;
@@ -300,9 +302,6 @@ public class Grid {
         List<Cell> openCells = grid.get_all_open_cells();
         grid.generate_unique_random_fire_button_and_bot_cells(openCells); 
 ;
-
-       
-       
         grid.printGrid();
         System.out.println("Fire Cell: "+grid.getInitialFireCell().getRow() + " " + grid.getInitialFireCell().getCol());  
         System.out.println("Buttton Cell: "+grid.getButtonCell().getRow() + " " + grid.getButtonCell().getCol());
@@ -320,12 +319,18 @@ public class Grid {
         
         // bot1.move_bot(path, grid.getBotCell(), grid.getButtonCell(), 0.7);  
 
-         //Bot #2 test - still need to finish
          
-         Fire fire = new Fire(grid);
-         Bot2 bot2 = new Bot2(grid, fire);
-         System.out.println("Bot2 path");
-         bot2.moveBot(grid.getBotCell(), grid.getButtonCell(), 0.7);
+        //  Fire fire = new Fire(grid);
+        //  Bot2 bot2 = new Bot2(grid, fire);
+        //  System.out.println("Bot2 path");
+        //  bot2.moveBot(grid.getBotCell(), grid.getButtonCell(), 0.7);
+
+        Bot4 bot4 = new Bot4(grid);
+        bot4.get_path_for_bot_4(0.4);
+
+         
+
+
     }
 
     public Cell[][] copyGridState() {

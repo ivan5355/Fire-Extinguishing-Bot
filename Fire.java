@@ -66,7 +66,7 @@ public class Fire {
         }
         return count;
     }
-     
+
     public void spread_fire(List<Cell> open_neigbors, double ship_flambility) {
         for (Cell cell: open_neigbors){
             int r = cell.getRow();
