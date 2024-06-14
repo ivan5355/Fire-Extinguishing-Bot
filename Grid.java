@@ -325,11 +325,12 @@ public class Grid {
         //  System.out.println("Bot2 path");
         //  bot2.moveBot(grid.getBotCell(), grid.getButtonCell(), 0.7);
 
-        Bot4 bot4 = new Bot4(grid);
-        bot4.get_path_for_bot_4(0.4);
+        // Bot4 bot4 = new Bot4(grid);
+        // bot4.get_path_for_bot_4(0.4);
 
-         
-
+        Fire fire = new Fire(grid);
+        Bot3 bot3 = new Bot3(grid, fire);
+        bot3.movin_the_bot(grid.getBotCell(), grid.getButtonCell(), 0.8);
 
     }
 

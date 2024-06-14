@@ -43,7 +43,7 @@ public class Bot3
                     seen_these_cells[neighbor.getRow()][neighbor.getCol()] = true;
                     
                     neighbor.setParent_of_the_cell(current);      
-                lineup_of_the_cells.add(neighbor);
+                    lineup_of_the_cells.add(neighbor);
                 }
             }
         }
@@ -69,9 +69,12 @@ public class Bot3
         return path_ofcells;
     }
 
-    public void movin_the_bot(Cell botCell, Cell buttonCell) 
+    public void movin_the_bot(Cell botCell, Cell buttonCell, double ship_flambility) 
     {
         List<Cell> path = pat_for_bot_3(botCell, buttonCell);
+        for(Cell cell:path){
+            System.out.println(cell.getRow() + " " + cell.getCol());
+        }
         
         for (Cell step : path) 
         {
@@ -80,11 +83,26 @@ public class Bot3
                 System.out.println("Bot met fire at " + step.getRow() + "," + step.getCol());
                 
                 break;
-            } else 
-            {
-                System.out.println("Movin to " + step.getRow() + "," + step.getCol());
+            } 
+            else if(step.equals(buttonCell)){
+                System.out.println("Bot reached the button at " + step.getRow() + "," + step.getCol());
+            }
+            else{
+                System.out.println("Bot movin to " + step.getRow() + "," + step.getCol());
                 
                 grid.getCell(step.getRow(), step.getCol()).setBot(true);
+
+                fire.spread_fire(fire.get_all_adj_open_neigbors_of_fire_cells(), ship_flambility);
+                path = pat_for_bot_3(step, buttonCell);
+                for(Cell cell:path){
+                    System.out.println(cell.getRow() + " " + cell.getCol());
+                }
+                if(path.isEmpty())
+                {
+                    grid.printGrid();
+                    System.out.println("No way for bot to reach the button");
+                    break;
+                }
                 grid.printGrid();
             }
         }
