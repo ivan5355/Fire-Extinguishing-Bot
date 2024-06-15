@@ -101,12 +101,7 @@ public class Bot2 {
             
             List<Cell> adjOpenCells = fire.get_all_adj_open_neigbors_of_fire_cells();
             List<Cell> path_to_nearest_fire = bot4.find_path_to_nearest_fire_cell(current);
-           // System.out.println("Path to nearest fire:");
-            for(Cell cell:path_to_nearest_fire){
-                System.out.println(cell.getRow() + " " + cell.getCol());
-            }
-            int fire_path_size = path_to_nearest_fire.size();
-          //  System.out.println("Fire path size " + fire_path_size);
+        
         
             fire.spread_fire(adjOpenCells, ship_flambility);
             if(next.hasBot() && next.hasButton()) {
@@ -114,7 +109,6 @@ public class Bot2 {
            //     System.out.println("Current path:");
 
                 path = finding_path_for_bot_two(next, button);
-                System.out.println(path.size());
                 for(Cell cell:path){
                     System.out.println(cell.getRow() + " " + cell.getCol());
                 }
@@ -125,7 +119,6 @@ public class Bot2 {
                 fire.extinguish_fire();
                 grid.printGrid();
            //     System.out.println("Fire has been extinguished. Task completed.");
-                break;
             }
             if(!path.isEmpty()){
                 grid.printGrid();
@@ -135,6 +128,7 @@ public class Bot2 {
                     System.out.println(cell.getRow() + " " + cell.getCol());
                 }
                 System.out.println("Path size: " + path.size());
+              
             }
             if(path.isEmpty()) {
                 grid.printGrid();
@@ -145,6 +139,7 @@ public class Bot2 {
                 System.out.println("Task failed. No  path to button");
             }
         }
+    
         
     }
     

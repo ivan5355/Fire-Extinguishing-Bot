@@ -199,7 +199,7 @@ public class Bot4 {
         // double min_cost = Double.MAX_VALUE;
         // Cell min_cost_cell = null;
     
-       
+        //how it would work for 1 move
         Cell botCell = grid.getBotCell();
         List<Cell> path = new LinkedList<>();
         Fire fire = new Fire(grid); // Assuming Fire is a class managing fire spread

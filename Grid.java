@@ -75,7 +75,7 @@ public class Grid {
 
     public List<Cell> get_blockedCells_with_one_open_neighbour() {
         if(blockedCells_with_one_open_neighbour.isEmpty()){
-           System.out.println("No more blocked cells with one open neighbour");
+          // System.out.println("No more blocked cells with one open neighbour");
         }
         return blockedCells_with_one_open_neighbour;
     }
@@ -138,23 +138,23 @@ public class Grid {
 
         int half = cells.size()/2;
 
-        System.out.println("Half of open cells with open neigbors");
+       // System.out.println("Half of open cells with open neigbors");
         for(int i = 0; i < half; i++){
              int index = (int) (Math.random() * cells.size());
-             System.out.println(cells.get(index).getRow() + " " + cells.get(index).getCol());
+           //  System.out.println(cells.get(index).getRow() + " " + cells.get(index).getCol());
              half_of_open_cells_with_open_neigCells.add(cells.get(index));
              cells.remove(index);
         }
         
-        System.out.println(cells.size());
-        System.out.println("**********");
+      //  System.out.println(cells.size());
+     //   System.out.println("**********");
 
-        System.out.println("Blocked neigbors opened of half of open cells with open neigbors");
+       // System.out.println("Blocked neigbors opened of half of open cells with open neigbors");
         for(Cell cell: half_of_open_cells_with_open_neigCells){
             List<Cell> blocked_neigbors = get_all_blocked_neigbors_of_a_cell(cell);
             if(blocked_neigbors.size() > 0){
                 int index = (int) (Math.random() * blocked_neigbors.size());
-                System.out.println(blocked_neigbors.get(index).getRow() + " " + blocked_neigbors.get(index).getCol());
+              //  System.out.println(blocked_neigbors.get(index).getRow() + " " + blocked_neigbors.get(index).getCol());
                 blocked_neigbors.get(index).setOpen(true);
             }
         }
@@ -174,36 +174,38 @@ public class Grid {
 
 
     public void printGrid() {
-       
-        System.out.print("  ");
+    // Determine the width for each cell based on the maximum number of digits in row/col indices
+    int cellWidth = String.valueOf(Math.max(rows, cols)).length() + 1;
+    String format = "%" + cellWidth + "s";
+
+    // Print column indices header
+    System.out.print("  ");
+    for (int c = 0; c < cols; c++) {
+        System.out.printf(format, c);
+    }
+    System.out.println();
+
+    // Print grid with row indices
+    for (int r = 0; r < rows; r++) {
+        System.out.printf(format, r);  // Print row index
+
         for (int c = 0; c < cols; c++) {
-            System.out.print(c + " ");
+            if (grid[r][c].hasButton()) {
+                System.out.printf(format, "B");
+            } else if (grid[r][c].hasFire()) {
+                System.out.printf(format, "*");
+            } else if (grid[r][c].hasBot()) {
+                System.out.printf(format, "T");
+            } else if (grid[r][c].isOpen()) {
+                System.out.printf(format, "O");
+            } else {
+                System.out.printf(format, "X");
+            }
         }
         System.out.println();
-    
-        for (int r = 0; r < rows; r++) {
-
-            System.out.print(r + " ");
-    
-            for (int c = 0; c < cols; c++) {
-                if (grid[r][c].hasButton()) {
-                    System.out.print("B ");
-                // }else if(grid[r][c].hasPath()){
-                //     System.out.print("P ");
-                } else if (grid[r][c].hasFire()) {
-                    System.out.print("* ");
-                } else if (grid[r][c].hasBot()) {
-                    System.out.print("T ");
-                } else if (grid[r][c].isOpen()) {
-                    System.out.print("O ");
-                }
-                else {
-                    System.out.print("X ");
-                }
-            }
-            System.out.println();
-        }
     }
+}
+
     
     public Cell getInitialFireCell() {
         return initial_fire_cell;
@@ -272,66 +274,97 @@ public class Grid {
         return grid;
     }
     public static void main(String[] args) {
-       Grid grid = new Grid(10, 10);
 
-       grid.get_all_cells_with_exactly_one_open_neighbour();
-    //    for(Cell cell: grid.blockedCells_with_one_open_neighbour){
-    //         System.out.println(cell.getRow() + " " + cell.getCol());
-    //     }
-        while(!grid.blockedCells_with_one_open_neighbour.isEmpty()){
-            grid.get_all_cells_with_exactly_one_open_neighbour();
-            grid.randomly_open_one_of_adjcells(grid.get_blockedCells_with_one_open_neighbour());
+        //Bot1
+        System.out.println("Bot1 Test");
+        Grid test_grid = new Grid(15, 15);
+        test_grid.get_all_cells_with_exactly_one_open_neighbour();
+        while(!test_grid.blockedCells_with_one_open_neighbour.isEmpty()){
+            test_grid.get_all_cells_with_exactly_one_open_neighbour();
+            test_grid.randomly_open_one_of_adjcells(test_grid.get_blockedCells_with_one_open_neighbour());
         }
-        
-        grid.printGrid();
+        List<Cell> openCells_with_one_open_neighbour = test_grid.get_open_cells_with_one_open_neighbour();
+        test_grid.randomly_select_half_open_cells_with_one_open_neighbour_and_open_blocked_neigbor(openCells_with_one_open_neighbour);
+        List<Cell> openCells = test_grid.get_all_open_cells();
 
-       List<Cell> openCells_with_one_open_neighbour = grid.get_open_cells_with_one_open_neighbour();
-
-       System.out.println("Open cells with one open neighbour");
-       for(Cell cell: openCells_with_one_open_neighbour){
+        test_grid.generate_unique_random_fire_button_and_bot_cells(openCells); 
+        Fire fire = new Fire(test_grid);
+        Bot1 bot1 = new Bot1(test_grid, fire);
+        List<Cell> path = bot1.finding_path_for_bot_one(test_grid.getBotCell(), test_grid.getButtonCell());
+        test_grid.printGrid();
+        System.out.println("Path for Bot");
+        for(Cell cell: path){
             System.out.println(cell.getRow() + " " + cell.getCol());
-         }
-
-         System.out.println(openCells_with_one_open_neighbour.size());
-
-         System.out.println("**********");
-
-        
-        grid.randomly_select_half_open_cells_with_one_open_neighbour_and_open_blocked_neigbor(openCells_with_one_open_neighbour);
- 
-        List<Cell> openCells = grid.get_all_open_cells();
-        grid.generate_unique_random_fire_button_and_bot_cells(openCells); 
-;
-        grid.printGrid();
-        System.out.println("Fire Cell: "+grid.getInitialFireCell().getRow() + " " + grid.getInitialFireCell().getCol());  
-        System.out.println("Buttton Cell: "+grid.getButtonCell().getRow() + " " + grid.getButtonCell().getCol());
-        System.out.println("Bot Cell: "+grid.getBotCell().getRow() + " " + grid.getBotCell().getCol());
+        }
     
-           //Bot #1 works
-        // System.out.println("Bot1 path");
-        // Fire fire = new Fire(grid);
-        // Bot1 bot1 = new Bot1(grid, fire);
-
-        // List<Cell> path = bot1.finding_path_for_bot_one(grid.getBotCell(), grid.getButtonCell());
-        // for(Cell cell: path){
-        //     System.out.println(cell.getRow() + " " + cell.getCol());
-        // }
-        
-        // bot1.move_bot(path, grid.getBotCell(), grid.getButtonCell(), 0.7);  
-
+        double[] q_values = new double[10];
+        for(int i = 0; i<q_values.length; i++){
+            double q = Math.random();
+            q_values[i] = q;
+        }  
          
-        //  Fire fire = new Fire(grid);
-        //  Bot2 bot2 = new Bot2(grid, fire);
-        //  System.out.println("Bot2 path");
-        //  bot2.moveBot(grid.getBotCell(), grid.getButtonCell(), 0.7);
+        for(int i = 0; i<q_values.length; i++){
+            int success = 0;
+            for(int j = 0; j<20; j++){
+                Grid grid = new Grid(15, 15);
+                grid.get_all_cells_with_exactly_one_open_neighbour();
+                while(!grid.blockedCells_with_one_open_neighbour.isEmpty()){
+                    grid.get_all_cells_with_exactly_one_open_neighbour();
+                    grid.randomly_open_one_of_adjcells(grid.get_blockedCells_with_one_open_neighbour());
+                }
+                openCells_with_one_open_neighbour = grid.get_open_cells_with_one_open_neighbour();
+                grid.randomly_select_half_open_cells_with_one_open_neighbour_and_open_blocked_neigbor(openCells_with_one_open_neighbour);
+                openCells = grid.get_all_open_cells();
 
-        // Bot4 bot4 = new Bot4(grid);
-        // bot4.get_path_for_bot_4(0.4);
+                grid.generate_unique_random_fire_button_and_bot_cells(openCells); 
+                fire = new Fire(grid);
+                bot1 = new Bot1(grid, fire);
+                path = bot1.finding_path_for_bot_one(grid.getBotCell(), grid.getButtonCell());
+                if(!path.isEmpty()){
+                success++;
+                }
+            }
+            System.out.println("Success rate for q value " + q_values[i] + " is " + success/20);
 
-        Fire fire = new Fire(grid);
-        Bot3 bot3 = new Bot3(grid, fire);
-        bot3.movin_the_bot(grid.getBotCell(), grid.getButtonCell(), 0.8);
 
+         //Bot2 
+          System.out.println("Bot2 Test");
+          Grid grid2 = new Grid(15, 15);
+          grid2.get_all_cells_with_exactly_one_open_neighbour();
+          while(!grid2.blockedCells_with_one_open_neighbour.isEmpty()){
+                grid2.get_all_cells_with_exactly_one_open_neighbour();
+                grid2.randomly_open_one_of_adjcells(grid2.get_blockedCells_with_one_open_neighbour());
+           }
+           List<Cell> openCells_with_one_open_neighbour2 = grid2.get_open_cells_with_one_open_neighbour();
+           grid2.randomly_select_half_open_cells_with_one_open_neighbour_and_open_blocked_neigbor(openCells_with_one_open_neighbour2);
+           List<Cell> openCells2 = grid2.get_all_open_cells();
+
+          grid2.generate_unique_random_fire_button_and_bot_cells(openCells2); 
+          Fire fire2 = new Fire(grid2);
+          Bot2 bot2 = new Bot2(grid2, fire2);
+          System.out.println("Bot2 path");
+          bot2.moveBot(grid2.getBotCell(), grid2.getButtonCell(), 0.7);
+
+        //Bot3 Test
+        System.out.println("Bot3 Test");
+        Grid grid3 = new Grid(15, 15);
+        grid3.get_all_cells_with_exactly_one_open_neighbour();
+        while (!grid3.blockedCells_with_one_open_neighbour.isEmpty()) {
+            grid3.get_all_cells_with_exactly_one_open_neighbour();
+            grid3.randomly_open_one_of_adjcells(grid3.get_blockedCells_with_one_open_neighbour());
+        }
+        List<Cell> openCells_with_one_open_neighbour3 = grid3.get_open_cells_with_one_open_neighbour();
+        grid3.randomly_select_half_open_cells_with_one_open_neighbour_and_open_blocked_neigbor(openCells_with_one_open_neighbour3);
+        List<Cell> openCells3 = grid3.get_all_open_cells();
+
+        grid3.generate_unique_random_fire_button_and_bot_cells(openCells3);
+       
+        Fire fire3 = new Fire(grid3);
+        Bot3 bot3 = new Bot3(grid3, fire3);
+        bot3.movin_the_bot(grid3.getBotCell(), grid3.getButtonCell(), 0.7);
+
+
+        }
     }
 
     public Cell[][] copyGridState() {

@@ -14,7 +14,7 @@ public class Bot3
         this.fire = fire;
     }
 
-    public List<Cell> pat_for_bot_3(Cell beginning, Cell ending) 
+    public List<Cell> path_for_bot_3(Cell beginning, Cell ending) 
     {
         boolean[][] seen_these_cells = new boolean[grid.getRows()][grid.getCols()];
 
@@ -71,7 +71,7 @@ public class Bot3
 
     public void movin_the_bot(Cell botCell, Cell buttonCell, double ship_flambility) 
     {
-        List<Cell> path = pat_for_bot_3(botCell, buttonCell);
+        List<Cell> path = path_for_bot_3(botCell, buttonCell);
         for(Cell cell:path){
             System.out.println(cell.getRow() + " " + cell.getCol());
         }
@@ -93,7 +93,7 @@ public class Bot3
                 grid.getCell(step.getRow(), step.getCol()).setBot(true);
 
                 fire.spread_fire(fire.get_all_adj_open_neigbors_of_fire_cells(), ship_flambility);
-                path = pat_for_bot_3(step, buttonCell);
+                path = path_for_bot_3(step, buttonCell);
                 for(Cell cell:path){
                     System.out.println(cell.getRow() + " " + cell.getCol());
                 }
