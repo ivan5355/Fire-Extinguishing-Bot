@@ -5,16 +5,15 @@ import java.util.Queue;
 public class Bot2 {
     private Grid grid;
     private Fire fire;
-   
+
 
     public Bot2(Grid grid, Fire fire) {
         this.grid = grid;
         this.fire = fire;
     }
 
-    
-
-    public List<Cell> finding_path_for_bot_two(Cell beginning, Cell ending)
+     //finding the path for the bot
+     public List<Cell> finding_path_for_bot_two(Cell beginning, Cell ending)
     {
         // HashMap<Cell, Cell> remaking_the_path_for_the_cells = new HashMap<>();
         boolean[][] seen_these_cells = new boolean[grid.getRows()][grid.getCols()];
@@ -32,7 +31,7 @@ public class Bot2 {
             if(the_present_cell.equals(ending))
             {
                  return remaking_the_path_for_the_cells(ending);
-             }
+            }
             
             //look thru the adjacent cells in the grid
             int[] indices_for_the_row = {-1, 1, 0, 0}; // changed
@@ -58,19 +57,18 @@ public class Bot2 {
         return new LinkedList<>();  
     }
 
+    //remaking the path for the cells
     private LinkedList<Cell> remaking_the_path_for_the_cells(Cell ending)
     {
-        
         LinkedList<Cell> new_cell_path = new LinkedList<>();
         for (Cell i = ending; i != null; i = i.getParent_of_the_Cell()) 
         {
             new_cell_path.addFirst(i);
-            //i.cellPath(true);
         }
         return new_cell_path;
-        
     }
 
+    //checking if it is safe to visit the cell
     private boolean is_it_safe_to_visit_the_cel(int r, int c, boolean[][]seen_these_cells)
     {
         return r >= 0 &&
@@ -83,42 +81,33 @@ public class Bot2 {
                 grid.getCell(r,c).isOpen();
     }
 
+    //move the bot
     public void moveBot(Cell bot, Cell button, double ship_flambility) {
+
         List<Cell> path = finding_path_for_bot_two(bot, button);
-        for(Cell f_path:path){
-            System.out.println(f_path.getRow() + " " + f_path.getCol());
+        for(Cell cell:path){
+            System.out.println(cell.getRow() + " " + cell.getCol());
         }
-
-        Bot4 bot4 = new Bot4(grid);
-
+        
         while(path.size() > 1) {
-     
             Cell current = path.get(0);
-           
             Cell next = path.get(1);
             current.setBot(false);
             next.setBot(true);
             
             List<Cell> adjOpenCells = fire.get_all_adj_open_neigbors_of_fire_cells();
-            List<Cell> path_to_nearest_fire = bot4.find_path_to_nearest_fire_cell(current);
-        
-        
             fire.spread_fire(adjOpenCells, ship_flambility);
+            
             if(next.hasBot() && next.hasButton()) {
                 grid.printGrid();
-           //     System.out.println("Current path:");
-
+                System.out.println("Current path:");
                 path = finding_path_for_bot_two(next, button);
                 for(Cell cell:path){
                     System.out.println(cell.getRow() + " " + cell.getCol());
                 }
-
-                int path_size = path.size();
-                System.out.println("path size " + path_size);
-
                 fire.extinguish_fire();
-                grid.printGrid();
-           //     System.out.println("Fire has been extinguished. Task completed.");
+                System.out.println("Fire has been extinguished. Task completed.");
+                break;
             }
             if(!path.isEmpty()){
                 grid.printGrid();
@@ -127,8 +116,6 @@ public class Bot2 {
                 for(Cell cell:path){
                     System.out.println(cell.getRow() + " " + cell.getCol());
                 }
-                System.out.println("Path size: " + path.size());
-              
             }
             if(path.isEmpty()) {
                 grid.printGrid();
@@ -139,7 +126,6 @@ public class Bot2 {
                 System.out.println("Task failed. No  path to button");
             }
         }
-    
         
     }
     

@@ -6,15 +6,13 @@ public class Bot1 {
     private Grid grid;
     private Fire fire;
 
+     
     public Bot1(Grid grid, Fire fire) {
         this.grid = grid;
         this.fire = fire;
     }
 
-    // • Bot 1 - This bot plans the shortest path to the button, avoiding the initial fire cell,
-    // and then executes that
-    // plan. The spread of the fire is ignored by the bot
-
+   // Bot 1 - This bot plans the shortest path to the button, avoiding the initial fire cell, and then executes that plan. The spread of the fire is ignored by the bot
     public List<Cell> finding_path_for_bot_one(Cell beginning, Cell ending)
     {
         // HashMap<Cell, Cell> remaking_the_path_for_the_cells = new HashMap<>();
@@ -36,9 +34,8 @@ public class Bot1 {
             }
             
             //look thru the adjacent cells in the grid
-            int[] indices_for_the_row = {-1, 1, 0, 0}; // changed
-            int[] indices_for_the_colum = {0, 0, -1, 1}; // changed
-            
+            int[] indices_for_the_row = {-1, 1, 0, 0}; 
+            int[] indices_for_the_colum = {0, 0, -1, 1}; 
            
             for(int i = 0 ; i < 4; i++)
             {
@@ -60,18 +57,19 @@ public class Bot1 {
         return new LinkedList<>();  
     }
 
+    // This method is used to create a path for the bot to follow
     private List<Cell> remaking_the_path_for_the_cells(Cell ending)
     {
         LinkedList<Cell> new_cell_path = new LinkedList<>();
         for (Cell i = ending; i != null; i = i.getParent_of_the_Cell()) 
         {
-           // i.setPath();
             new_cell_path.addFirst(i);
         }
         return new_cell_path;
         
     }
 
+    // This method is used to check if the bot can visit a cell
     private boolean is_it_safe_to_visit_the_cel(int r, int c, boolean[][]seen_these_cells)
     {
         return r >= 0 &&
@@ -83,15 +81,26 @@ public class Bot1 {
                 grid.getCell(r,c).isOpen();
     }
   
-    public void move_bot(List<Cell> path, Cell bot_cell, Cell button_cell, double ship_flambility) {
+    // moves the bot along the path
+    public void move_bot(double ship_flambility) {
+        Cell bot_cell = grid.getBotCell();
+        Cell button_cell = grid.getButtonCell();
+        List<Cell> path = finding_path_for_bot_one(bot_cell, button_cell);
+        for(Cell cell: path){
+            System.out.println(cell.getRow() + " " + cell.getCol());
+        }
+        
         for (int i = 0; i < path.size(); i++) {
             List<Cell> adj_open_cells = fire.get_all_adj_open_neigbors_of_fire_cells();
             fire.spread_fire(adj_open_cells, ship_flambility);
             Cell next_cell = path.get(i);
-            bot_cell.setBot(false);
+            //bot_cell.setBot(false);
             next_cell.setBot(true);
             bot_cell = next_cell;
+            grid.setBotCell(bot_cell);
             grid.printGrid();
+            System.out.println("Bot moved to " + bot_cell.getRow() + " " + bot_cell.getCol());
+
             if(bot_cell.hasFire()){
                 System.out.println("Task failed");
                 break;
@@ -103,7 +112,7 @@ public class Bot1 {
                 break;
             }
         }
-        grid.printGrid();
+       
      }
 
 
