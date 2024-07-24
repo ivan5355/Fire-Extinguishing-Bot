@@ -2,7 +2,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-public class Bot1 {
+public class Bot1 implements FireEscapeBot{
     private Grid grid;
     private Fire fire;
 
@@ -12,25 +12,23 @@ public class Bot1 {
         this.fire = fire;
     }
 
-   // Bot 1 - This bot plans the shortest path to the button, avoiding the initial fire cell, and then executes that plan. The spread of the fire is ignored by the bot
+   
     public List<Cell> finding_path_for_bot_one(Cell beginning, Cell ending)
     {
-        // HashMap<Cell, Cell> remaking_the_path_for_the_cells = new HashMap<>();
         boolean[][] seen_these_cells = new boolean[grid.getRows()][grid.getCols()];
         Queue<Cell> lineup_of_the_cells = new LinkedList<>();
 
         seen_these_cells[beginning.getRow()][beginning.getCol()] = true; //changed
         beginning.setParent_of_the_cell(null);
         lineup_of_the_cells.add(beginning);
-        // remaking_the_path_for_the_cells.put(beginning, null);
-
+       
         while(!lineup_of_the_cells.isEmpty())
         {
             Cell the_present_cell = lineup_of_the_cells.remove();
 
             if(the_present_cell.equals(ending))
             {
-                 return remaking_the_path_for_the_cells(ending);
+                 return create_path(ending);
             }
             
             //look thru the adjacent cells in the grid
@@ -44,13 +42,9 @@ public class Bot1 {
                 if(is_it_safe_to_visit_the_cel(r,c,seen_these_cells))
                 {
                     seen_these_cells[r][c] = true;
-                    
                     Cell look_at_upcoming_cell = grid.getCell(r,c);  
-                   
                     look_at_upcoming_cell.setParent_of_the_cell(the_present_cell);     
-                   
                     lineup_of_the_cells.add(look_at_upcoming_cell);         
-
                 }
             }
         }
@@ -58,7 +52,7 @@ public class Bot1 {
     }
 
     // This method is used to create a path for the bot to follow
-    private List<Cell> remaking_the_path_for_the_cells(Cell ending)
+    private List<Cell> create_path(Cell ending)
     {
         LinkedList<Cell> new_cell_path = new LinkedList<>();
         for (Cell i = ending; i != null; i = i.getParent_of_the_Cell()) 
@@ -81,7 +75,7 @@ public class Bot1 {
                 grid.getCell(r,c).isOpen();
     }
   
-    // moves the bot along the path
+    // Bot 1 - This bot plans the shortest path to the button, avoiding the initial fire cell, and then executes that plan. The spread of the fire is ignored by the bot
     public void move_bot(double ship_flambility) {
         Cell bot_cell = grid.getBotCell();
         Cell button_cell = grid.getButtonCell();
@@ -94,7 +88,7 @@ public class Bot1 {
             List<Cell> adj_open_cells = fire.get_all_adj_open_neigbors_of_fire_cells();
             fire.spread_fire(adj_open_cells, ship_flambility);
             Cell next_cell = path.get(i);
-            //bot_cell.setBot(false);
+            bot_cell.setBot(false);
             next_cell.setBot(true);
             bot_cell = next_cell;
             grid.setBotCell(bot_cell);
@@ -102,7 +96,7 @@ public class Bot1 {
             System.out.println("Bot moved to " + bot_cell.getRow() + " " + bot_cell.getCol());
 
             if(bot_cell.hasFire()){
-                System.out.println("Task failed");
+                System.out.println("Bot caught on fire. Task failed");
                 break;
             }
             System.out.println("**********");

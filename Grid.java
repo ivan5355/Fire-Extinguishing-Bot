@@ -158,23 +158,17 @@ public class Grid {
 
         int half = cells.size()/2;
 
-       // System.out.println("Half of open cells with open neigbors");
+
         for(int i = 0; i < half; i++){
              int index = (int) (Math.random() * cells.size());
-           //  System.out.println(cells.get(index).getRow() + " " + cells.get(index).getCol());
              half_of_open_cells_with_open_neigCells.add(cells.get(index));
              cells.remove(index);
         }
         
-      //  System.out.println(cells.size());
-     //   System.out.println("**********");
-
-       // System.out.println("Blocked neigbors opened of half of open cells with open neigbors");
         for(Cell cell: half_of_open_cells_with_open_neigCells){
             List<Cell> blocked_neigbors = get_all_blocked_neigbors_of_a_cell(cell);
             if(blocked_neigbors.size() > 0){
                 int index = (int) (Math.random() * blocked_neigbors.size());
-              //  System.out.println(blocked_neigbors.get(index).getRow() + " " + blocked_neigbors.get(index).getCol());
                 blocked_neigbors.get(index).setOpen(true);
             }
         }
@@ -255,7 +249,6 @@ public class Grid {
         }
         System.out.println("┘");
     }
-
     
     public Cell getInitialFireCell() {
         return initial_fire_cell;
@@ -328,21 +321,34 @@ public class Grid {
         return grid;
     }
     public static void main(String[] args) {
-        Grid grid = new Grid(20, 20);
+
+        //Bot 1 - This bot plans the shortest path to the button, avoiding the initial fire cell, and then executes thatplan. The spread of the fire is ignored by the bot
+        Grid grid = new Grid(25, 25);
         Fire fire = new Fire(grid);
         Bot1 bot1 = new Bot1(grid, fire);
         bot1.move_bot(0.5);
         System.out.print(grid.getBotCell().getRow() + " " + grid.getBotCell().getCol());
         System.out.println();
         System.out.println(grid.getButtonCell().getRow() + " " + grid.getButtonCell().getCol());
+        
+        //Bot 2 - At every time step, the bot re-plans the shortest path to the button, avoiding the current fire cells,and then executes the next step in that plan.
+        grid = new Grid(25, 25);
+        fire = new Fire(grid);
+        Bot2 bot2 = new Bot2(grid, fire);
+        bot2.move_bot(0.5);
+        System.out.print(grid.getBotCell().getRow() + " " + grid.getBotCell().getCol());
+        System.out.println();
+        System.out.println(grid.getButtonCell().getRow() + " " + grid.getButtonCell().getCol());
 
-        // if(grid.getBotCell().equals(grid.getButtonCell()) && !grid.getBotCell().hasFire()){
-        //     System.out.println("Task completed");
-        // }
-        // else{
-        //     System.out.println("Task failed");
-        // }
-       
+        //Bot 3 - This bot plans the shortest path to the button, avoiding the current fire cells, and then executes the next step in that plan. The bot also considers the spread of the fire when planning its path.
+        grid = new Grid(25, 25);
+        fire = new Fire(grid);
+        Bot3 bot3 = new Bot3(grid, fire);
+        bot3.move_bot(0.5);
+        System.out.print(grid.getBotCell().getRow() + " " + grid.getBotCell().getCol());
+        System.out.println();
+        System.out.println(grid.getButtonCell().getRow() + " " + grid.getButtonCell().getCol());
+
     } 
 }
 
