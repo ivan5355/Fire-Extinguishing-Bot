@@ -7,7 +7,7 @@ import java.util.List;
 
 public class BotPerformanceEval {
     private static final int GRID_SIZE = 25;
-    private static final int SIMULATIONS_PER_Q = 25;
+    private static final int SIMULATIONS_PER_Q = 40;
     private static final BigDecimal Q_STEP = BigDecimal.valueOf(0.1);
 
     //Run a single simulation for a given q value(flamability), Takes in a bot class, where a new instance is created each time
@@ -45,7 +45,7 @@ public class BotPerformanceEval {
         Bot1 bot1 = new Bot1(new Grid(GRID_SIZE, GRID_SIZE), new Fire(new Grid(GRID_SIZE, GRID_SIZE)));
 
         //Runs simulation for given q values
-        for (BigDecimal q = BigDecimal.ZERO; q.compareTo(new BigDecimal("1")) < 0; q = q.add(Q_STEP)) {
+        for (BigDecimal q = BigDecimal.ZERO; q.compareTo(new BigDecimal("0.9")) < 0; q = q.add(Q_STEP)) {
             qValues.add(q);
             double successRate = runSimulationsForQ(q.doubleValue(), bot1.getClass());
             successRates.add(successRate);
@@ -85,6 +85,20 @@ public class BotPerformanceEval {
         // System.out.println("Q values: " + qValues);
         // System.out.println("Success rates: " + successRates);
 
+        // List<BigDecimal> qValues = new ArrayList<>();
+        // List<Double> successRates = new ArrayList<>();
+        // Bot4 bot4 = new Bot4(new Grid(GRID_SIZE, GRID_SIZE), new Fire(new Grid(GRID_SIZE, GRID_SIZE)));
+
+        // //Runs simulation for given q values
+        // for (BigDecimal q = BigDecimal.ZERO; q.compareTo(new BigDecimal("0.9")) < 0; q = q.add(Q_STEP)) {
+        //     qValues.add(q);
+        //     double successRate = runSimulationsForQ(q.doubleValue(), bot4.getClass());
+        //     successRates.add(successRate);
+        //     System.out.printf("Q: %.2f, Success Rate: %.4f%n", q, successRate);
+        // }
+
+        // System.out.println("Q values: " + qValues);
+        // System.out.println("Success rates: " + successRates);
 
     }
 }
